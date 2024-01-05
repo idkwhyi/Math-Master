@@ -1,0 +1,65 @@
+Talk to you: "SEMUA AMAN DONT BE OVER-COMMITING"
+
+
+📌 TODO: 
+1. koin (display and updating)          [✅]
+2. update score to db                   [✅]
+3. open secret level logic              [✅]
+4. re-make the leaderboard              [✅]
+5. display coin in bonus page           [✅] 
+6. if time is 0 then lose               [✅]
+7. user purchase db bro                 [✅]
+8. score dan koin (bonus level)         [✅]
+9. if user try again random again?      [NO]
+10. edit all ui                         [ON PROGRESS]
+11. insert score data to DB             []
+
+
+🎰 terkait database
+- insert the score to the db for leaderboard
+
+
+🐞 Bug 
+- add gap for button container/ buttonPAnel in level
+
+
+
+🪼 Font Style
+Title       : Fredoka One
+Text font   : Nunito
+Button      : Monserat/Nunito
+
+✅
+
+
+🐠 Style page font family:
+Login page          [✅]
+Register page       [✅]
+Home page           [✅]
+Mode page           [✅]
+Mode                [✅]
+Level               [✅]
+Leaderboard page    [✅]
+Bonus page          [✅]
+Bonus level         [✅]
+
+
+🦄 Style page font family:
+Login page          [✅]
+Register page       [✅]
+Home page           [✅]
+Mode page           [✅]
+Mode                [✅]
+Level               [✅]
+Level Joption pane  [✅]
+Leaderboard page    []
+Bonus page          []
+Bonus level         []
+
+
+// 
+add border color
+submitButton.setBorderColor(Color.RED); 
+
+add border thickness
+submitButton.setBorderThickness(2); 
