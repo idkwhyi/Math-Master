@@ -4,19 +4,20 @@ import javax.swing.border.EmptyBorder;
 import java.awt.event.*;
 import java.awt.*;
 
-public class RegisterPage extends JPanel {
+public class ResetPassword extends JPanel {
 
-    private DatabaseManager databaseManager;
+    private DatabaseManager databaseManager = new DatabaseManager();
+    private String enteredUsername;
 
     Style style = new Style();
 
-    RegisterPage(DatabaseManager databaseManager) {
-        this.databaseManager = databaseManager;
+    ResetPassword() {
         initComponents();
     }
 
+    // JButton submitButton;
     RoundedButton backButton;
-    RoundedButton createAccountButton;
+    RoundedButton resetPasswordButton;
 
     public void initComponents() {
         // setLayout(new FlowLayout(FlowLayout.CENTER, 0, 50));
@@ -26,33 +27,30 @@ public class RegisterPage extends JPanel {
 
         // styling
         Font titleFont = new Font(style.font_title, Font.BOLD, style.h1);
-        Font labelFont = new Font(style.font_text, Font.BOLD, style.text_font_big);
+        Font labelFont = new Font(style.font_text, Font.BOLD, style.h3);
         Font inputFont = new Font(style.font_text, Font.PLAIN, style.text_font_big);
         Font buttonFont = new Font(style.font_button, Font.BOLD, style.text_font_medium);
         Font backFont = new Font(style.font_button, Font.PLAIN, style.text_font_small);
+
 
         int top = 1;
         int right = 7;
         int bottom = 1;
         int left = 7;
         int borderRadius = 10;
-
-
-        JPanel marginTop = new JPanel();
-        marginTop.setBackground(style.backgroundColor);
-        marginTop.setPreferredSize(new Dimension(60, 0));
+        // styling
 
         JPanel mainPanel = new JPanel();
-        mainPanel.setBounds(430, 0, 420, 600);
-        mainPanel.setLayout(new GridLayout(6, 1, 20, 15));
+        mainPanel.setBounds(430, 85, 420, 720);
+        mainPanel.setLayout(new GridLayout(7, 1, 15, 20));
         mainPanel.setBackground(style.backgroundColor);
 
-        JLabel registerTitle = new JLabel("Register Here!");
-        registerTitle.setFont(titleFont);
-        registerTitle.setHorizontalAlignment(JLabel.CENTER);
-        registerTitle.setVerticalAlignment(JLabel.CENTER);
-        registerTitle.setForeground(style.whiteColor);
-        registerTitle.setOpaque(false);
+        JLabel loginTitle = new JLabel("Reset Password");
+        loginTitle.setFont(titleFont);
+        loginTitle.setHorizontalAlignment(JLabel.CENTER);
+        loginTitle.setVerticalAlignment(JLabel.CENTER);
+        loginTitle.setForeground(style.whiteColor);
+        loginTitle.setOpaque(false);
 
         // username
         JPanel usernamePanel = new JPanel();
@@ -60,7 +58,7 @@ public class RegisterPage extends JPanel {
         usernamePanel.setPreferredSize(new Dimension(200, 100));
         usernamePanel.setBackground(style.backgroundColor);
 
-        JLabel usernameLabel = new JLabel("New Username");
+        JLabel usernameLabel = new JLabel("Your Username");
         usernameLabel.setFont(labelFont);
         usernameLabel.setForeground(style.whiteColor);
         usernameLabel.setOpaque(false);
@@ -91,7 +89,7 @@ public class RegisterPage extends JPanel {
 
         passwordPanel.add(passwordLabel);
         passwordPanel.add(passwordField);
-
+        
         // email
         JPanel emailPanel = new JPanel();
         emailPanel.setLayout(new GridLayout(2, 1, 0, 5));
@@ -122,22 +120,21 @@ public class RegisterPage extends JPanel {
         backButton.setBorderColor(Color.WHITE);
         backButton.setBorderThickness(2);
 
-        createAccountButton = new RoundedButton("Create Account");
-        createAccountButton.setFont(buttonFont);
-        createAccountButton.setPreferredSize(new Dimension(200, 75));
-        createAccountButton.setForeground(style.whiteColor);
-        createAccountButton.setBackground(style.purpleColor);
-        createAccountButton.setBorder(new EmptyBorder(10, 20, 10, 20)); // Padding for text
-        createAccountButton.setCornerRadius(borderRadius);
+        resetPasswordButton = new RoundedButton("Reset Password");
+        resetPasswordButton.setFont(buttonFont);
+        resetPasswordButton.setPreferredSize(new Dimension(200, 75));
+        resetPasswordButton.setForeground(style.greyColor);
+        resetPasswordButton.setBackground(new Color(0xffffff));
+        resetPasswordButton.setBorder(new EmptyBorder(10, 20, 10, 20)); // Padding for text
+        resetPasswordButton.setCornerRadius(borderRadius);
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(style.backgroundColor);
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         buttonPanel.add(backButton);
-        buttonPanel.add(createAccountButton);
+        buttonPanel.add(resetPasswordButton);
 
-        mainPanel.add(marginTop);
-        mainPanel.add(registerTitle);
+        mainPanel.add(loginTitle);
         mainPanel.add(usernamePanel);
         mainPanel.add(passwordPanel);
         mainPanel.add(emailPanel);
@@ -155,36 +152,32 @@ public class RegisterPage extends JPanel {
             }
         });
 
-        createAccountButton.addActionListener(new ActionListener() {
+        resetPasswordButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String newUsername = usernameField.getText();
-                String newPassword = passwordField.getText();
-                String newEmail = emailField.getText();
 
-                if (newUsername.isEmpty() || newPassword.isEmpty() || newEmail.isEmpty()) {
-                    JOptionPane.showMessageDialog(RegisterPage.this,
-                            "Cannot be empty. Please fill in all fields.", "Input Error",
-                            JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
+                enteredUsername = usernameField.getText();
+                String enteredPassword = passwordField.getText();
+                String enteredEmail = emailField.getText();
 
-                boolean registrationSuccess = databaseManager.registerUser(newUsername, newPassword, newEmail);
+                boolean resetStatus = databaseManager.resetPassword(enteredUsername, enteredPassword, enteredEmail);
 
-                if (registrationSuccess) {
-                    JOptionPane.showMessageDialog(RegisterPage.this,
-                            "New Account has been Created Successfully", "New Account Created",
+                if (resetStatus) {
+                    JOptionPane.showMessageDialog(ResetPassword.this,
+                            "Your password has been successfully reset", "Password Reset Complete",
                             JOptionPane.INFORMATION_MESSAGE);
+                    System.out.println("success resetpass");
                     CardLayout cardLayout = (CardLayout) getParent().getLayout();
                     cardLayout.show(getParent(), "login");
+    
                 } else {
-                    JOptionPane.showMessageDialog(RegisterPage.this,
-                            "Username already exists. Please choose a different username.", "Registration Error",
+                    JOptionPane.showMessageDialog(ResetPassword.this,
+                            "The data you entered is incorrect. Please check again!", "Login Error",
                             JOptionPane.WARNING_MESSAGE);
-
                 }
+
+                // i want a popup appear after password reset before back to login page
             }
         });
     }
-
 }

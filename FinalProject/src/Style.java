@@ -6,7 +6,7 @@ public class Style {
     String font_text = "Nunito";
     String font_button = "Montserrat";
 
-    int h1 = 32;
+    int h1 = 35;
     int h2 = 24;
     int h3 = 20;
     int text_font_big = 18;

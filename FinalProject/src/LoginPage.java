@@ -19,15 +19,17 @@ public class LoginPage extends JPanel {
     // JButton submitButton;
     RoundedButton submitButton;
     RoundedButton createAccount;
+    RoundedButton resetPassword;
 
     public void initComponents() {
-        setLayout(new FlowLayout(FlowLayout.CENTER, 0, 50));
+        // setLayout(new FlowLayout(FlowLayout.CENTER, 0, 50));
+        setLayout(null);
         setPreferredSize(new Dimension(1280, 720));
         setBackground(style.backgroundColor);
 
         // styling
         Font titleFont = new Font(style.font_title, Font.BOLD, style.h1);
-        Font labelFont = new Font(style.font_text, Font.BOLD, style.h3);
+        Font labelFont = new Font(style.font_text, Font.BOLD, style.text_font_big);
         Font inputFont = new Font(style.font_text, Font.PLAIN, style.text_font_big);
         Font buttonFont = new Font(style.font_button, Font.BOLD, style.text_font_medium);
         Font createAccountFont = new Font(style.font_button, Font.PLAIN, style.text_font_small);
@@ -39,12 +41,9 @@ public class LoginPage extends JPanel {
         int borderRadius = 10;
         // styling
 
-        JPanel marginTop = new JPanel();
-        marginTop.setBackground(style.backgroundColor);
-        marginTop.setPreferredSize(new Dimension(60, 0));
-
         JPanel mainPanel = new JPanel();
-        mainPanel.setLayout(new GridLayout(5, 1, 20, 10));
+        mainPanel.setBounds(430, 30, 420, 720);
+        mainPanel.setLayout(new GridLayout(7, 1, 15, 20));
         mainPanel.setBackground(style.backgroundColor);
 
         JLabel loginTitle = new JLabel("Log In to Your Account");
@@ -92,6 +91,25 @@ public class LoginPage extends JPanel {
         passwordPanel.add(passwordLabel);
         passwordPanel.add(passwordField);
 
+        // email
+        JPanel emailPanel = new JPanel();
+        emailPanel.setLayout(new GridLayout(2, 1, 0, 5));
+        emailPanel.setPreferredSize(new Dimension(300, 100));
+        emailPanel.setBackground(style.backgroundColor);
+
+        JLabel emaiLabel = new JLabel("Email");
+        emaiLabel.setFont(labelFont);
+        emaiLabel.setForeground(style.whiteColor);
+        emaiLabel.setOpaque(false);
+
+        JTextField emailField = new JTextField();
+        emailField.setPreferredSize(new Dimension(250, 40));
+        emailField.setFont(inputFont);
+        emailField.setBorder(new EmptyBorder(top, left, bottom, right));
+
+        emailPanel.add(emaiLabel);
+        emailPanel.add(emailField);
+
         // buttons
         submitButton = new RoundedButton("Login");
         submitButton.setFont(buttonFont);
@@ -109,17 +127,27 @@ public class LoginPage extends JPanel {
         createAccount.setBorder(new EmptyBorder(10, 20, 10, 20)); // Padding for text
         createAccount.setCornerRadius(borderRadius);
 
+        resetPassword = new RoundedButton("Reset Password");
+        resetPassword.setFont(buttonFont);
+        resetPassword.setPreferredSize(new Dimension(200, 50));
+        resetPassword.setForeground(style.greyColor);
+        resetPassword.setBackground(new Color(0xffffff));
+        resetPassword.setBorder(new EmptyBorder(10, 20, 10, 20)); // Padding for text
+        resetPassword.setCornerRadius(borderRadius);
+
         JPanel buttonPanel = new JPanel();
         buttonPanel.setBackground(style.backgroundColor);
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         buttonPanel.add(submitButton);
         buttonPanel.add(createAccount);
+        buttonPanel.add(resetPassword);
 
-        mainPanel.add(marginTop);
         mainPanel.add(loginTitle);
         mainPanel.add(usernamePanel);
         mainPanel.add(passwordPanel);
+        mainPanel.add(emailPanel);
         mainPanel.add(buttonPanel);
+        mainPanel.add(resetPassword);
 
         add(mainPanel, BorderLayout.CENTER);
         setVisible(true);
@@ -130,6 +158,7 @@ public class LoginPage extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 enteredUsername = usernameField.getText();
                 String enteredPassword = passwordField.getText();
+                String enteredEmail = emailField.getText();
 
                 Container container = getParent();
                 Component[] components = container.getComponents();
@@ -140,7 +169,7 @@ public class LoginPage extends JPanel {
                 }
                 CardLayout cardLayout = (CardLayout) container.getLayout();
 
-                boolean loginSuccess = databaseManager.loginUser(enteredUsername, enteredPassword);
+                boolean loginSuccess = databaseManager.loginUser(enteredUsername, enteredPassword, enteredEmail);
 
                 if (loginSuccess) {
                     HomePage home = new HomePage(enteredUsername);
@@ -163,9 +192,22 @@ public class LoginPage extends JPanel {
                 cardLayout.show(getParent(), "register");
             }
         });
-    }
 
-    public String getUsername() {
-        return enteredUsername;
+        resetPassword.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Container container = getParent();
+                Component[] components = container.getComponents();
+                for (Component component : components) {
+                    if (component instanceof ResetPassword) {
+                        container.remove(component);
+                    }
+                }
+                CardLayout cardLayout = (CardLayout) container.getLayout();
+                ResetPassword resetPassword = new ResetPassword();
+                container.add(resetPassword, "reset");
+                cardLayout.show(container, "reset");
+            }
+        });
     }
 }
