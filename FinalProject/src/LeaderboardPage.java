@@ -7,8 +7,6 @@ import java.util.List;
 
 public class LeaderboardPage extends JPanel {
 
-    Color backgroundColor = new Color(0x3887BE);
-
     LeaderboardManager leaderboardManager = new LeaderboardManager();
 
     List<Object[]> easyPlayerScoreData;
@@ -33,10 +31,16 @@ public class LeaderboardPage extends JPanel {
         int borderRadius = 10;
         Font titleFont = new Font(style.font_title, Font.BOLD, style.h1);
         Font labelFont = new Font(style.font_title, Font.BOLD, style.h3);
-        Font leaderboardItemsFont = new Font(style.font_text, Font.PLAIN, style.text_font_big);
+        Font leaderboardItemsFont = new Font(style.font_text, Font.BOLD, style.text_font_medium);
+        Font leaderboardRankFont = new Font(style.font_text, Font.BOLD, style.text_font_big);
         Font btn_info = new Font(style.font_button, Font.BOLD, style.text_font_medium);
 
         JPanel gap = new JPanel();
+        gap.setPreferredSize(new Dimension(0, 25));
+        gap.setOpaque(false);
+        JPanel gap2 = new JPanel();
+        gap2.setPreferredSize(new Dimension(0, 25));
+        gap2.setOpaque(false);
 
         // margin
         JPanel marginLeft = new JPanel();
@@ -64,7 +68,7 @@ public class LeaderboardPage extends JPanel {
         backButton.setBorderThickness(2);
 
         JLabel title = new JLabel("Leaderboard");
-        title.setPreferredSize(new Dimension(210, 50));
+        title.setPreferredSize(new Dimension(240, 50));
         title.setHorizontalAlignment(JLabel.CENTER);
         title.setFont(titleFont);
         title.setBackground(style.leaderboardBgColor);
@@ -76,89 +80,102 @@ public class LeaderboardPage extends JPanel {
         // back button
 
         // main leaderboard
-        // int totalMode = 4;
         int easyLength = easyPlayerScoreData.size() + 2;
         int mediumLength = mediumPlayerScoreData.size() + 1;
         int hardLength = hardPlayerScoreData.size() + 1;
-        // int total = n * totalMode;
-        // JPanel panel = new JPanel(new GridLayout(totalMode, 1)); // set the scroll
+
         // height
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(style.leaderboardBgColor);
+        panel.setBorder(BorderFactory.createEmptyBorder(2, 10, 2, 15));
 
-        JPanel easyContainer = new JPanel(new BorderLayout());
-        JPanel mediumContainer = new JPanel(new BorderLayout());
-        JPanel hardContainer = new JPanel(new BorderLayout());
+        RoundedPanel easyContainer = new RoundedPanel(20);
+        easyContainer.setLayout(new BorderLayout());
+        RoundedPanel mediumContainer = new RoundedPanel(20);
+        mediumContainer.setLayout(new BorderLayout());
+        RoundedPanel hardContainer = new RoundedPanel(20);
+        hardContainer.setLayout(new BorderLayout());
 
-        easyContainer.setBackground(style.leaderboardBgColor);
-        mediumContainer.setBackground(style.leaderboardBgColor);
-        hardContainer.setBackground(style.leaderboardBgColor);
+        easyContainer.setBackground(style.leaderboardLayerColor);
+        mediumContainer.setBackground(style.leaderboardLayerColor);
+        hardContainer.setBackground(style.leaderboardLayerColor);
 
         JLabel easyLabel = new JLabel("Easy Mode");
         easyLabel.setFont(labelFont);
         easyLabel.setForeground(style.whiteColor);
+        easyLabel.setBorder(BorderFactory.createEmptyBorder(2, 3, 20, 5));
         JLabel mediumLabel = new JLabel("Medium Mode");
         mediumLabel.setFont(labelFont);
         mediumLabel.setForeground(style.whiteColor);
+        mediumLabel.setBorder(BorderFactory.createEmptyBorder(2, 3, 20, 5));
         JLabel hardLabel = new JLabel("Hard Mode");
         hardLabel.setFont(labelFont);
         hardLabel.setForeground(style.whiteColor);
+        hardLabel.setBorder(BorderFactory.createEmptyBorder(2, 3, 20, 5));
 
-        JPanel easyLeaderboard = new JPanel(new GridLayout(easyLength, 1));
-        JPanel mediumLeaderboard = new JPanel(new GridLayout(mediumLength, 1));
-        JPanel hardLeaderboard = new JPanel(new GridLayout(hardLength, 1));
+        JPanel easyLeaderboard = new JPanel(new GridLayout(easyLength, 1, 0, 5));
+        JPanel mediumLeaderboard = new JPanel(new GridLayout(mediumLength, 1, 0, 5));
+        JPanel hardLeaderboard = new JPanel(new GridLayout(hardLength, 1, 0, 5));
 
         easyLeaderboard.setBackground(style.leaderboardBgColor);
         mediumLeaderboard.setBackground(style.leaderboardBgColor);
         hardLeaderboard.setBackground(style.leaderboardBgColor);
 
-        JPanel easyItems = new JPanel(new GridLayout(1, 3));
-        JPanel mediumItems = new JPanel(new GridLayout(1, 3));
-        JPanel hardItems = new JPanel(new GridLayout(1, 3));
+        easyLeaderboard.setOpaque(false);
+        mediumLeaderboard.setOpaque(false);
+        hardLeaderboard.setOpaque(false);
+
+        JPanel easyItems = new JPanel(new GridLayout(1, 4, 15, 0));
+        JPanel mediumItems = new JPanel(new GridLayout(1, 3, 15, 0));
+        JPanel hardItems = new JPanel(new GridLayout(1, 3, 15, 0));
 
         JLabel rank_text_easy = new JLabel("Rank");
         rank_text_easy.setFont(leaderboardItemsFont);
-        rank_text_easy.setBackground(style.leaderboardBgColor);
+        rank_text_easy.setBackground(style.leaderboardLayerColor);
         rank_text_easy.setForeground(style.whiteColor);
         JLabel username_text_easy = new JLabel("Username");
         username_text_easy.setFont(leaderboardItemsFont);
-        username_text_easy.setBackground(style.leaderboardBgColor);
+        username_text_easy.setBackground(style.leaderboardLayerColor);
         username_text_easy.setForeground(style.whiteColor);
         JLabel score_text_easy = new JLabel("Score");
         score_text_easy.setFont(leaderboardItemsFont);
-        score_text_easy.setBackground(style.leaderboardBgColor);
+        score_text_easy.setBackground(style.leaderboardLayerColor);
         score_text_easy.setForeground(style.whiteColor);
 
         JLabel rank_text_medium = new JLabel("Rank");
         rank_text_medium.setFont(leaderboardItemsFont);
-        rank_text_medium.setBackground(style.leaderboardBgColor);
+        rank_text_medium.setBackground(style.leaderboardLayerColor);
         rank_text_medium.setForeground(style.whiteColor);
         JLabel username_text_medium = new JLabel("Username");
         username_text_medium.setFont(leaderboardItemsFont);
-        username_text_medium.setBackground(style.leaderboardBgColor);
+        username_text_medium.setBackground(style.leaderboardLayerColor);
         username_text_medium.setForeground(style.whiteColor);
         JLabel score_text_medium = new JLabel("Score");
         score_text_medium.setFont(leaderboardItemsFont);
-        score_text_medium.setBackground(style.leaderboardBgColor);
+        score_text_medium.setBackground(style.leaderboardLayerColor);
         score_text_medium.setForeground(style.whiteColor);
 
         JLabel rank_text_hard = new JLabel("Rank");
         rank_text_hard.setFont(leaderboardItemsFont);
-        rank_text_hard.setBackground(style.leaderboardBgColor);
+        rank_text_hard.setBackground(style.leaderboardLayerColor);
         rank_text_hard.setForeground(style.whiteColor);
         JLabel username_text_hard = new JLabel("Username");
         username_text_hard.setFont(leaderboardItemsFont);
-        username_text_hard.setBackground(style.leaderboardBgColor);
+        username_text_hard.setBackground(style.leaderboardLayerColor);
         username_text_hard.setForeground(style.whiteColor);
         JLabel score_text_hard = new JLabel("Score");
         score_text_hard.setFont(leaderboardItemsFont);
-        score_text_hard.setBackground(style.leaderboardBgColor);
+        score_text_hard.setBackground(style.leaderboardLayerColor);
         score_text_hard.setForeground(style.whiteColor);
 
-        easyItems.setBackground(style.leaderboardBgColor);
-        mediumItems.setBackground(style.leaderboardBgColor);
-        hardItems.setBackground(style.leaderboardBgColor);
+        easyItems.setBackground(style.leaderboardLayerColor);
+        mediumItems.setBackground(style.leaderboardLayerColor);
+        hardItems.setBackground(style.leaderboardLayerColor);
+
+        easyItems.setBorder(BorderFactory.createEmptyBorder(2, 10, 2, 5));
+        mediumItems.setBorder(BorderFactory.createEmptyBorder(2, 10, 2, 5));
+        hardItems.setBorder(BorderFactory.createEmptyBorder(2, 10, 2, 5));
 
         easyItems.add(rank_text_easy);
         easyItems.add(username_text_easy);
@@ -176,37 +193,37 @@ public class LeaderboardPage extends JPanel {
         mediumLeaderboard.add(mediumItems);
         hardLeaderboard.add(hardItems);
 
+        // Border border = BorderFactory.createMatteBorder(01, 01, 1, 01,
+        // style.whiteColor);
+
         for (int i = 0; i < easyPlayerScoreData.size(); i++) {
             Object[] pair = easyPlayerScoreData.get(i);
             int playerId = (int) pair[0];
             int totalScore = (int) pair[1];
 
-            JPanel entryPanel = new JPanel(new GridLayout(1, 3));
-            entryPanel.setBackground(style.leaderboardBgColor);
+            RoundedPanel entryPanel = new RoundedPanel(10);
+            entryPanel.setLayout(new GridLayout(1, 3, 15, 0));
+            entryPanel.setBackground(style.whiteColor);
+            entryPanel.setBorder(BorderFactory.createEmptyBorder(2, 10, 2, 5));
 
             int easy_rank = i + 1;
             JLabel rankLabel = new JLabel(String.valueOf(easy_rank));
             JLabel nameLabel = new JLabel(leaderboardManager.getUsername(playerId));
             JLabel scoreLabel = new JLabel(String.valueOf(totalScore));
 
-            rankLabel.setFont(leaderboardItemsFont);
-            nameLabel.setFont(leaderboardItemsFont);
-            scoreLabel.setFont(leaderboardItemsFont);
+            rankLabel.setFont(leaderboardRankFont);
+            nameLabel.setFont(leaderboardRankFont);
+            scoreLabel.setFont(leaderboardRankFont);
 
-            rankLabel.setBackground(style.leaderboardBgColor);
-            nameLabel.setBackground(style.leaderboardBgColor);
-            scoreLabel.setBackground(style.leaderboardBgColor);
-            
-            if(i%2 == 0){
-                rankLabel.setForeground(style.secondLeaderboard);
-                nameLabel.setForeground(style.secondLeaderboard);
-                scoreLabel.setForeground(style.secondLeaderboard);
-            } else {
-                rankLabel.setForeground(style.whiteColor);
-                nameLabel.setForeground(style.whiteColor);
-                scoreLabel.setForeground(style.whiteColor);
-            }
-            
+            rankLabel.setForeground(style.blackColor);
+            nameLabel.setForeground(style.blackColor);
+            scoreLabel.setForeground(style.blackColor);
+
+            rankLabel.setOpaque(false);
+            nameLabel.setOpaque(false);
+            scoreLabel.setOpaque(false);
+
+            // entryPanel.setBorder(border);
             entryPanel.add(rankLabel);
             entryPanel.add(nameLabel);
             entryPanel.add(scoreLabel);
@@ -219,25 +236,27 @@ public class LeaderboardPage extends JPanel {
             int playerId = (int) pair[0];
             int totalScore = (int) pair[1];
 
-            JPanel entryPanel = new JPanel(new GridLayout(1, 3));
-            entryPanel.setBackground(style.leaderboardBgColor);
+            RoundedPanel entryPanel = new RoundedPanel(10);
+            entryPanel.setLayout(new GridLayout(1, 3, 15, 0));
+            entryPanel.setBackground(style.whiteColor);
+            entryPanel.setBorder(BorderFactory.createEmptyBorder(2, 10, 2, 5));
 
             int easy_rank = i + 1;
             JLabel rankLabel = new JLabel(String.valueOf(easy_rank));
             JLabel nameLabel = new JLabel(leaderboardManager.getUsername(playerId));
             JLabel scoreLabel = new JLabel(String.valueOf(totalScore));
 
-            rankLabel.setFont(leaderboardItemsFont);
-            nameLabel.setFont(leaderboardItemsFont);
-            scoreLabel.setFont(leaderboardItemsFont);
+            rankLabel.setFont(leaderboardRankFont);
+            nameLabel.setFont(leaderboardRankFont);
+            scoreLabel.setFont(leaderboardRankFont);
 
-            rankLabel.setBackground(style.leaderboardBgColor);
-            nameLabel.setBackground(style.leaderboardBgColor);
-            scoreLabel.setBackground(style.leaderboardBgColor);
+            rankLabel.setForeground(style.blackColor);
+            nameLabel.setForeground(style.blackColor);
+            scoreLabel.setForeground(style.blackColor);
 
-            rankLabel.setForeground(style.whiteColor);
-            nameLabel.setForeground(style.whiteColor);
-            scoreLabel.setForeground(style.whiteColor);
+            rankLabel.setOpaque(false);
+            nameLabel.setOpaque(false);
+            scoreLabel.setOpaque(false);
 
             entryPanel.add(rankLabel);
             entryPanel.add(nameLabel);
@@ -251,25 +270,27 @@ public class LeaderboardPage extends JPanel {
             int playerId = (int) pair[0];
             int totalScore = (int) pair[1];
 
-            JPanel entryPanel = new JPanel(new GridLayout(1, 3));
-            entryPanel.setBackground(style.leaderboardBgColor);
+            RoundedPanel entryPanel = new RoundedPanel(10);
+            entryPanel.setLayout(new GridLayout(1, 3, 15, 0));
+            entryPanel.setBackground(style.whiteColor);
+            entryPanel.setBorder(BorderFactory.createEmptyBorder(2, 10, 2, 5));
 
             int easy_rank = i + 1;
             JLabel rankLabel = new JLabel(String.valueOf(easy_rank));
             JLabel nameLabel = new JLabel(leaderboardManager.getUsername(playerId));
             JLabel scoreLabel = new JLabel(String.valueOf(totalScore));
 
-            rankLabel.setFont(leaderboardItemsFont);
-            nameLabel.setFont(leaderboardItemsFont);
-            scoreLabel.setFont(leaderboardItemsFont);
+            rankLabel.setFont(leaderboardRankFont);
+            nameLabel.setFont(leaderboardRankFont);
+            scoreLabel.setFont(leaderboardRankFont);
 
-            rankLabel.setBackground(style.leaderboardBgColor);
-            nameLabel.setBackground(style.leaderboardBgColor);
-            scoreLabel.setBackground(style.leaderboardBgColor);
+            rankLabel.setForeground(style.blackColor);
+            nameLabel.setForeground(style.blackColor);
+            scoreLabel.setForeground(style.blackColor);
 
-            rankLabel.setForeground(style.whiteColor);
-            nameLabel.setForeground(style.whiteColor);
-            scoreLabel.setForeground(style.whiteColor);
+            rankLabel.setOpaque(false);
+            nameLabel.setOpaque(false);
+            scoreLabel.setOpaque(false);
 
             entryPanel.add(rankLabel);
             entryPanel.add(nameLabel);
@@ -279,31 +300,27 @@ public class LeaderboardPage extends JPanel {
         }
 
         easyContainer.add(easyLabel, BorderLayout.NORTH);
-        easyContainer.add(gap);
         easyContainer.add(easyLeaderboard, BorderLayout.SOUTH);
-        easyContainer.setBackground(style.leaderboardBgColor);
 
         mediumContainer.add(mediumLabel, BorderLayout.NORTH);
-        mediumContainer.add(gap);
         mediumContainer.add(mediumLeaderboard, BorderLayout.CENTER);
-        mediumContainer.setBackground(style.leaderboardBgColor);
 
         hardContainer.add(hardLabel, BorderLayout.NORTH);
-        hardContainer.add(gap);
         hardContainer.add(hardLeaderboard, BorderLayout.CENTER);
-        hardContainer.setBackground(style.leaderboardBgColor);
 
-        easyContainer.setBorder(BorderFactory.createEmptyBorder(5, 0, 20, 5));
-        mediumContainer.setBorder(BorderFactory.createEmptyBorder(5, 0, 20, 5));
-        hardContainer.setBorder(BorderFactory.createEmptyBorder(5, 0, 20, 5));
+        easyContainer.setBorder(BorderFactory.createEmptyBorder(10, 15, 5, 15));
+        mediumContainer.setBorder(BorderFactory.createEmptyBorder(10, 15, 5, 15));
+        hardContainer.setBorder(BorderFactory.createEmptyBorder(10, 15, 5, 15));
 
         panel.add(easyContainer);
+        panel.add(gap);
         panel.add(mediumContainer);
+        panel.add(gap2);
         panel.add(hardContainer);
 
         JScrollPane scrollPanel = new JScrollPane(panel);
         scrollPanel.setBackground(style.leaderboardBgColor);
-        scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPanel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         scrollPanel.setPreferredSize(new Dimension(900, 1000));
 
         scrollPanel.setBorder(null);

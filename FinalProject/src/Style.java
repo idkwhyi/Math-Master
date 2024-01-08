@@ -18,6 +18,7 @@ public class Style {
 
     Color backgroundColor = new Color(0x1A1040);
     Color leaderboardBgColor = new Color(0x2C2559);
+    Color leaderboardItemsColor = new Color(0x47416E);
     Color backButtonColor = new Color(0x4A4759);
     Color darkGreyColor = new Color(56, 66, 73);
     Color pureBlack = new Color(0x171717);
@@ -37,4 +38,5 @@ public class Style {
     Color hardColor = new Color(0xFC3A6C);
     Color firstLeaderboard = new Color(0xf2f2f2);
     Color secondLeaderboard = new Color(0xcfcfcf);
+    Color leaderboardLayerColor = new Color(0x383775);
 }
