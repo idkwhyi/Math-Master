@@ -52,44 +52,105 @@ public class ScoreManager {
     }
 
     public void updateScore(int playerId, int newScore, String levelId, String modeId) {
-        int oldScore = getScore(playerId, levelId, modeId);
+        try {
+            String checkScoreQuery = "SELECT * FROM score WHERE ID = ? AND id_level = ? AND id_mode = ?";
+            try (PreparedStatement checkScoreStatement = connection.prepareStatement(checkScoreQuery)) {
+                checkScoreStatement.setInt(1, playerId);
+                checkScoreStatement.setString(2, levelId);
+                checkScoreStatement.setString(3, modeId);
 
-        if (oldScore == 0) {
-            // No existing score for the player and level, insert a new record
-            String insertQuery = "INSERT INTO score (score, ID, id_level, id_mode) VALUES (?, ?, ?, ?)";
-            try (PreparedStatement insertStatement = connection.prepareStatement(insertQuery)) {
-                insertStatement.setInt(1, newScore);
-                insertStatement.setInt(2, playerId);
-                insertStatement.setString(3, levelId);
-                insertStatement.setString(4, modeId);
-                int rowsInserted = insertStatement.executeUpdate();
-                if (rowsInserted > 0) {
-                    System.out.println("New score added successfully.");
-                } else {
-                    System.out.println("Failed to add new score.");
+                try (ResultSet resultSet = checkScoreStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        int oldScore = getScore(playerId, levelId, modeId);
+
+                        if(newScore > oldScore){
+
+                            String updateQuery = "UPDATE score SET score = ? WHERE ID = ? AND id_level = ? AND id_mode = ?";
+                            try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+                                updateStatement.setInt(1, newScore);
+                                updateStatement.setInt(2, playerId);
+                                updateStatement.setString(3, levelId);
+                                updateStatement.setString(4, modeId);
+                                int rowsUpdated = updateStatement.executeUpdate();
+                                if (rowsUpdated > 0) {
+                                    System.out.println("Score updated successfully.");
+                                } else {
+                                    System.out.println("Failed to update score.");
+                                }
+                            } catch (SQLException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    } else {
+                        String insertScoreQuery = "INSERT INTO score (score, ID, id_level, id_mode) VALUES (?, ?, ?, ?)";
+                        try (PreparedStatement insertStatement = connection.prepareStatement(insertScoreQuery)) {
+                            insertStatement.setInt(1, newScore);
+                            insertStatement.setInt(2, playerId);
+                            insertStatement.setString(3, levelId);
+                            insertStatement.setString(4, modeId);
+
+                            int rowsAffected = insertStatement.executeUpdate();
+                            if (rowsAffected > 0) {
+                                System.out.println("New score added successfully.");
+                            } else {
+                                System.out.println("Failed to add new score.");
+                            }
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
-        } else if (newScore > oldScore) {
-            // Update the score if the new score is greater than the old score
-            String updateQuery = "UPDATE score SET score = ? WHERE ID = ? AND id_level = ? AND id_mode = ?";
-            try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
-                updateStatement.setInt(1, newScore);
-                updateStatement.setInt(2, playerId);
-                updateStatement.setString(3, levelId);
-                updateStatement.setString(4, modeId);
-                int rowsUpdated = updateStatement.executeUpdate();
-                if (rowsUpdated > 0) {
-                    System.out.println("Score updated successfully.");
-                } else {
-                    System.out.println("Failed to update score.");
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("New score is not greater than the old score. No update needed.");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
+
+    // public void updateScore(int playerId, int newScore, String levelId, String
+    // modeId) {
+    // int oldScore = getScore(playerId, levelId, modeId);
+
+    // if (oldScore == 0) {
+    // // No existing score for the player and level, insert a new record
+    // String insertQuery = "INSERT INTO score (score, ID, id_level, id_mode) VALUES
+    // (?, ?, ?, ?)";
+    // try (PreparedStatement insertStatement =
+    // connection.prepareStatement(insertQuery)) {
+    // insertStatement.setInt(1, newScore);
+    // insertStatement.setInt(2, playerId);
+    // insertStatement.setString(3, levelId);
+    // insertStatement.setString(4, modeId);
+    // int rowsInserted = insertStatement.executeUpdate();
+    // if (rowsInserted > 0) {
+    // System.out.println("New score added successfully.");
+    // } else {
+    // System.out.println("Failed to add new score.");
+    // }
+    // } catch (SQLException e) {
+    // e.printStackTrace();
+    // }
+    // } else if (newScore > oldScore) {
+    // // Update the score if the new score is greater than the old score
+    // String updateQuery = "UPDATE score SET score = ? WHERE ID = ? AND id_level =
+    // ? AND id_mode = ?";
+    // try (PreparedStatement updateStatement =
+    // connection.prepareStatement(updateQuery)) {
+    // updateStatement.setInt(1, newScore);
+    // updateStatement.setInt(2, playerId);
+    // updateStatement.setString(3, levelId);
+    // updateStatement.setString(4, modeId);
+    // int rowsUpdated = updateStatement.executeUpdate();
+    // if (rowsUpdated > 0) {
+    // System.out.println("Score updated successfully.");
+    // } else {
+    // System.out.println("Failed to update score.");
+    // }
+    // } catch (SQLException e) {
+    // e.printStackTrace();
+    // }
+    // } else {
+    // System.out.println("New score is not greater than the old score. No update
+    // needed.");
+    // }
+    // }
 }

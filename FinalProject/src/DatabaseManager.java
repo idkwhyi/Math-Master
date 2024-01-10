@@ -4,7 +4,6 @@ public class DatabaseManager {
     private Connection connection;
 
     public DatabaseManager() {
-        // Initialize the database connection
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/MathMaster";
@@ -18,26 +17,88 @@ public class DatabaseManager {
 
     public boolean registerUser(String username, String password, String email) {
         try {
-            // Check if the username already exists
             if (usernameExists(username)) {
                 System.out.println("Username already exists. Please choose a different username.");
                 return false;
             }
 
-            // If the username is unique, proceed with registration
-            String query = "INSERT INTO player (username, password, email) VALUES (?, ?, ?)";
-            try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-                preparedStatement.setString(1, username);
-                preparedStatement.setString(2, password);
-                preparedStatement.setString(3, email);
-                int affectedRows = preparedStatement.executeUpdate();
-                return affectedRows > 0;
+            String insertPlayerQuery = "INSERT INTO player (username, password, email) VALUES (?, ?, ?)";
+            String insertCoinQuery = "INSERT INTO coin (ID, jumlah_koin) VALUES (?, ?)";
+
+            try (PreparedStatement insertPlayerStatement = connection.prepareStatement(insertPlayerQuery,
+                    Statement.RETURN_GENERATED_KEYS);
+                    PreparedStatement insertCoinStatement = connection.prepareStatement(insertCoinQuery)) {
+
+                // Insert into the player table
+                insertPlayerStatement.setString(1, username);
+                insertPlayerStatement.setString(2, password);
+                insertPlayerStatement.setString(3, email);
+
+                int affectedRows = insertPlayerStatement.executeUpdate();
+
+                if (affectedRows > 0) {
+                    try (ResultSet generatedKeys = insertPlayerStatement.getGeneratedKeys()) {
+                        if (generatedKeys.next()) {
+                            int playerId = generatedKeys.getInt(1);
+
+                            insertCoinStatement.setInt(1, playerId);
+                            insertCoinStatement.setInt(2, 0); 
+
+                            int coinRowsAffected = insertCoinStatement.executeUpdate();
+
+                            return coinRowsAffected > 0;
+                        } else {
+                            System.out.println("Failed to retrieve player ID after insertion.");
+                            return false;
+                        }
+                    }
+                } else {
+                    System.out.println("User registration failed.");
+                    return false;
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
+
+    // public boolean registerUser(String username, String password, String email,
+    // int id_player) {
+    // try {
+    // // Check if the username already exists
+    // if (usernameExists(username)) {
+    // System.out.println("Username already exists. Please choose a different
+    // username.");
+    // return false;
+    // }
+
+    // // If the username is unique, proceed with registration
+    // String query = "INSERT INTO player (username, password, email) VALUES (?, ?,
+    // ?)";
+    // try (PreparedStatement preparedStatement =
+    // connection.prepareStatement(query)) {
+    // preparedStatement.setString(1, username);
+    // preparedStatement.setString(2, password);
+    // preparedStatement.setString(3, email);
+    // int affectedRows = preparedStatement.executeUpdate();
+    // return affectedRows > 0;
+    // }
+
+    // String queryCoin = "INSERT INTO coin (ID, jumlah_koin) VALUES (?, ?)";
+    // try (PreparedStatement preparedStatement =
+    // connection.prepareStatement(queryCoin)) {
+    // preparedStatement.setString(1, username);
+    // preparedStatement.setString(2, password);
+    // preparedStatement.setString(3, email);
+    // int affectedRows = preparedStatement.executeUpdate();
+    // return affectedRows > 0;
+    // }
+    // } catch (SQLException e) {
+    // e.printStackTrace();
+    // return false;
+    // }
+    // }
 
     public boolean usernameExists(String username) throws SQLException {
         String query = "SELECT COUNT(*) FROM player WHERE username = ?";

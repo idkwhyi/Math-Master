@@ -21,7 +21,6 @@ public class Mode extends JPanel {
         this.username = username;
         this.player_id = playerId;
         this.modePage = modePage;
-        // coins = coinManager.getCoin(player_id);
         text_mode = getTextMode(mode);
         initComponents();
     }
@@ -31,7 +30,7 @@ public class Mode extends JPanel {
         setPreferredSize(new Dimension(1280, 720));
         setBackground(style.modeBgColor);
 
-        //style
+        // style
         Font titleFont = new Font(style.font_title, Font.BOLD, style.h1);
         Font levelFont = new Font(style.font_button, Font.BOLD, 18);
         Font btn_info = new Font(style.font_button, Font.BOLD, style.text_font_medium);
@@ -142,16 +141,32 @@ public class Mode extends JPanel {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                CardLayout cardLayout = (CardLayout) getParent().getLayout();
-                cardLayout.show(getParent(), "mode");
+                Container container = getParent();
+
+                Component[] components = container.getComponents();
+                for (Component component : components) {
+                    if (component instanceof ModePage) {
+                        container.remove(component);
+                    }
+                }
+
+                CardLayout cardLayout = (CardLayout) container.getLayout();
+
+                ModePage modePage = new ModePage(username);
+
+                container.add(modePage, "modepage");
+
+                cardLayout.show(container, "modepage");
+
+                container.revalidate();
+                container.repaint();
             }
         });
 
         leaderboard.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // CardLayout cardLayout = (CardLayout) getParent().getLayout();
-                // cardLayout.show(getParent(), "leaderboard");
+
                 Container container = getParent();
 
                 Component[] components = container.getComponents();
@@ -170,7 +185,6 @@ public class Mode extends JPanel {
 
                 container.revalidate();
                 container.repaint();
-                // updateCoinLabel();
             }
         });
 
@@ -197,7 +211,6 @@ public class Mode extends JPanel {
 
                 container.revalidate();
                 container.repaint();
-                // updateCoinLabel();
             }
         });
 
@@ -224,7 +237,6 @@ public class Mode extends JPanel {
 
                 container.revalidate();
                 container.repaint();
-                // updateCoinLabel();
             }
         });
         level3.addActionListener(new ActionListener() {
@@ -250,7 +262,6 @@ public class Mode extends JPanel {
 
                 container.revalidate();
                 container.repaint();
-                // updateCoinLabel();
             }
         });
         level4.addActionListener(new ActionListener() {
@@ -276,7 +287,6 @@ public class Mode extends JPanel {
 
                 container.revalidate();
                 container.repaint();
-                // updateCoinLabel();
             }
         });
         level5.addActionListener(new ActionListener() {

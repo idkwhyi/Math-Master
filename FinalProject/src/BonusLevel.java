@@ -121,6 +121,8 @@ public class BonusLevel extends JPanel {
     }
 
     private void initializeQuestions(String mode, String level) {
+        questions.clear();
+
         String id = questionManager.getQuestionID(mode, level);
         String question = questionManager.getQuestion(id);
         String answer = questionManager.getAnswer(id);
@@ -162,11 +164,6 @@ public class BonusLevel extends JPanel {
                 if (timerTime == 0) {
                     timer.stop();
                     timesUp();
-                    // currentQuestionIndex++;
-                    // displayQuestion();
-                    // timerTime = constTime; // Reset timer for the next question
-                    // timerBar.setValue(timerTime);
-                    // startTimer();
                 }
             }
         });
@@ -175,7 +172,6 @@ public class BonusLevel extends JPanel {
 
     public void readyPopup() {
         UIManager.put("OptionPane.messageFont", new Font(style.font_text, Font.PLAIN, style.text_font_medium));
-        // UIManager.put("OptionPane.background", Color.yellow);
         int choice = JOptionPane.showOptionDialog(
                 BonusLevel.this,
                 "Are you ready to start the bonus level?",
@@ -183,7 +179,7 @@ public class BonusLevel extends JPanel {
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.INFORMATION_MESSAGE,
                 null,
-                new Object[] { "Im Ready", "Back To Mode" },
+                new Object[] { "Im Ready", "Back To Bonus Level Page" },
                 "Im Ready");
 
         if (choice == JOptionPane.YES_OPTION) {
@@ -306,7 +302,7 @@ public class BonusLevel extends JPanel {
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.INFORMATION_MESSAGE,
                     null,
-                    new Object[] { "Resume", "Back To Mode" },
+                    new Object[] { "Resume", "Back To Bonus Level Page" },
                     "Resume");
 
             if (choice == JOptionPane.YES_OPTION) {
@@ -327,6 +323,7 @@ public class BonusLevel extends JPanel {
         timerTime = constTime;
         timerBar.setValue(timerTime);
         timer.start();
+        initializeQuestions(mode, level);
         displayQuestion();
     }
 

@@ -37,9 +37,8 @@ public class HomePage extends JPanel {
 
         JLabel usernameText = new JLabel("Welcome back, " + username + "!");
         usernameText.setFont(textFont);
-        usernameText.setBounds(10, 5, 250, 40);
+        usernameText.setBounds(10, 5, 500, 40);
         usernameText.setForeground(style.whiteColor);
-        // usernameText.setOpaque(false);
         add(usernameText);
 
         RoundedButton logoutButton = new RoundedButton("Log Out");
@@ -155,13 +154,10 @@ public class HomePage extends JPanel {
 
         // panel container
         JPanel panelContainer = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 50));
-        // panelContainer.setBackground(backgroundColor);
         panelContainer.setOpaque(false);
         panelContainer.setBounds(340, 30, 600, 700); // Adjust the bounds as needed
 
-        // panelContainer.setLayout(new BoxLayout(panelContainer, BoxLayout.Y_AXIS));
-        // panelContainer.setAlignmentX(Component.CENTER_ALIGNMENT);
-        // panelContainer.setAlignmentY(Component.CENTER_ALIGNMENT);
+
         panelContainer.add(gameTextPanel);
         panelContainer.add(mainButtonPanel);
 
@@ -195,8 +191,6 @@ public class HomePage extends JPanel {
         leaderboardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // CardLayout cardLayout = (CardLayout) getParent().getLayout();
-                // cardLayout.show(getParent(), "leaderboard");
                 Container container = getParent();
 
                 Component[] components = container.getComponents();

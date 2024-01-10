@@ -50,47 +50,62 @@ public class CoinManager {
     }
 
     public void updateCoin(int playerId, int coins) {
-        int coinBefore = getCoin(playerId);
+        // int defaultCoin = 0;
+        System.out.println(playerId);
+        System.out.println(coins);
+        // String query;
 
-        // System.out.println("coin before: " + coinBefore);
-        int coinAfter = coinBefore + coins;
-        System.out.println("coinmanager coin before" + coinBefore);
-        System.out.println("coinmanager coin after: " + coinAfter);
-        String query;
-    
-        if (coinBefore == 0) {
-            query = "INSERT INTO coin (ID, jumlah_koin) VALUES (?, ?)";
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setInt(1, playerId);
-                statement.setInt(2, coinAfter);
-        
-                int rowsAffected = statement.executeUpdate();
-        
-                if (rowsAffected > 0) {
-                    System.out.println("Coin updated/added successfully.");
-                } else {
-                    System.out.println("Failed to update/add coins.");
+        try {
+            // Check if the user already has a score
+            String checkScoreQuery = "SELECT * FROM coin WHERE ID = ?";
+            try (PreparedStatement checkScoreStatement = connection.prepareStatement(checkScoreQuery)) {
+                checkScoreStatement.setInt(1, playerId);
+
+                try (ResultSet resultSet = checkScoreStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        updateNewCoin(playerId, coins);
+                    } else {
+                        String insertCoinQuery = "INSERT INTO coin (ID, jumlah_koin) VALUES (?, ?)";
+                        try (PreparedStatement insertStatement = connection.prepareStatement(insertCoinQuery)) {
+                            insertStatement.setInt(1, playerId);
+                            insertStatement.setInt(2, 0);
+
+                            int rowsAffected = insertStatement.executeUpdate();
+                            if (rowsAffected > 0) {
+                                System.out.println("New coin added successfully.");
+                            } else {
+                                System.out.println("Failed to add new coin.");
+                            }
+
+                            updateNewCoin(playerId, coins);
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
             }
-        } else {
-            query = "UPDATE coin SET jumlah_koin = ? WHERE ID = ?";
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setInt(1, coinAfter);
-                statement.setInt(2, playerId);
-        
-                int rowsAffected = statement.executeUpdate();
-        
-                if (rowsAffected > 0) {
-                    System.out.println("Coin updated/added successfully.");
-                } else {
-                    System.out.println("Failed to update/add coins.");
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    
+    }
+
+    void updateNewCoin(int playerId, int coins) {
+        int coinBefore = getCoin(playerId);
+        int coinAfter = coinBefore + coins;
+
+        String updateQuery = "UPDATE coin SET jumlah_koin = ? WHERE ID = ?";
+        try (PreparedStatement updateStatement = connection.prepareStatement(updateQuery)) {
+            updateStatement.setInt(1, coinAfter);
+            updateStatement.setInt(2, playerId);
+
+            int rowsUpdated = updateStatement.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Coin updated successfully.");
+            } else {
+                System.out.println("Failed to update coin.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

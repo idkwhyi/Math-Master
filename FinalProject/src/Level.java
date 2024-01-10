@@ -38,7 +38,6 @@ public class Level extends JPanel {
         this.mode = mode;
         this.level = level;
         this.username = username;
-        System.out.println("level username: " + username);
         this.modePage = modePage;
 
         UIManager.put("OptionPane.noIcon", Boolean.TRUE);
@@ -210,17 +209,15 @@ public class Level extends JPanel {
 
         String choiceText = "";
 
-        System.out.println("levl player id: " + player_id);
-        System.out.println("levl coins " + coins);
 
         if (totalScore == 0) {
-            coins = 0;
-            System.out.println("jumlah koin didapat: " + coins);
-            coinManager.updateCoin(player_id, coins);
+            // coins = 0;
+            // System.out.println("jumlah koin didapat: " + coins);
+            // coinManager.updateCoin(player_id, coins);
             choiceText = "Your answer is wrong! ";
         } else {
             coins = getCoins(mode);
-            System.out.println("jumlah koin didapat: " + coins);
+            // System.out.println("jumlah koin didapat: " + coins);
             coinManager.updateCoin(player_id, coins);
             choiceText = "Congratulations! You completed the level. ";
         }
@@ -240,19 +237,9 @@ public class Level extends JPanel {
             restartLevel();
         } else if (choice == JOptionPane.NO_OPTION) {
             timer.stop();
-            // modePage.revalidate();
-            // modePage.repaint();
-            // modePage.updateCoinLabel();
-            // CardLayout cardLayout = (CardLayout) getParent().getLayout();
-            // cardLayout.show(getParent(), "mode");
             goToLevelPage(mode, username, player_id);
         } else {
             timer.stop();
-            // modePage.revalidate();
-            // modePage.repaint();
-            // modePage.updateCoinLabel();
-            // CardLayout cardLayout = (CardLayout) getParent().getLayout();
-            // cardLayout.show(getParent(), "mode");
             goToLevelPage(mode, username, player_id);
         }
     }
@@ -275,23 +262,9 @@ public class Level extends JPanel {
             restartLevel();
         } else if (choice == JOptionPane.NO_OPTION) {
             timer.stop();
-            System.out.println("other choice");
             goToLevelPage(mode, username, player_id);
-            // modePage.revalidate();
-            // modePage.repaint();
-            // modePage.updateCoinLabel();
-            // CardLayout cardLayout = (CardLayout) getParent().getLayout();
-            // cardLayout.show(getParent(), "bonus");
-
         } else {
             timer.stop();
-            // modePage.revalidate();
-            // modePage.repaint();
-            // modePage.updateCoinLabel();
-            // CardLayout cardLayout = (CardLayout) getParent().getLayout();
-            // cardLayout.show(getParent(), "bonus");
-            System.out.println("other choice");
-
             goToLevelPage(mode, username, player_id);
 
         }
@@ -330,9 +303,15 @@ public class Level extends JPanel {
                     "Resume");
 
             if (choice == JOptionPane.YES_OPTION) {
+                //resumt
                 // timer.start();
             } else if (choice == JOptionPane.NO_OPTION) {
-                restartLevel();
+                //back to level
+                timer.stop();
+                CardLayout cardLayout = (CardLayout) getParent().getLayout();
+                cardLayout.show(getParent(), "mode");
+            } else {
+                timer.stop();
                 CardLayout cardLayout = (CardLayout) getParent().getLayout();
                 cardLayout.show(getParent(), "mode");
             }
@@ -440,7 +419,6 @@ public class Level extends JPanel {
     private void goToLevelPage(String mode, String username, int playerID) {
         Container container = getParent();
         String fullmode = getFullMode(mode);
-        System.out.println("called goto level");
 
         Component[] components = container.getComponents();
         for (Component component : components) {
